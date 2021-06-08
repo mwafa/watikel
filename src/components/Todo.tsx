@@ -1,4 +1,4 @@
-import { Box, Link, Stack } from "@chakra-ui/layout"
+import { Box, Flex, Link, Stack } from "@chakra-ui/layout"
 import { ReactNode, useContext, useEffect, useState } from "react"
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/tabs"
 import { Tag, User, todo } from ".prisma/client"
@@ -7,6 +7,7 @@ import { AtSignIcon } from "@chakra-ui/icons"
 import { Button } from "@chakra-ui/button"
 import { LastUpdateCtx } from "../contexts/last-update"
 import { fetchTask } from "../services/fetcher"
+import moment from "moment"
 
 export type Menu = { label: string; content: ReactNode }
 
@@ -39,6 +40,7 @@ export const TodoList = ({
   action?: (id: number) => void
   actionLabel?: string
 }) => {
+  moment.locale("id")
   return (
     <Stack spacing={2}>
       {data.length === 0 && <Box>No Card</Box>}
@@ -69,18 +71,20 @@ export const TodoList = ({
               </Box>
             )}
           </Box>
-          <Box>
+          <Flex alignItems="center">
+            <Box fontSize="x-small">{moment(task.lastUpdate).fromNow()}</Box>
             {action && (
               <Button
                 onClick={() => action(task.id)}
                 size="sm"
                 variant="link"
                 colorScheme="teal"
+                ml="auto"
               >
                 {actionLabel}
               </Button>
             )}
-          </Box>
+          </Flex>
         </Stack>
       ))}
     </Stack>

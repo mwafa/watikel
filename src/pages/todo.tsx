@@ -1,28 +1,37 @@
-import { TodoList, TodoMenu } from "../components/Todo"
+import {
+  TodoDone,
+  TodoList,
+  TodoMenu,
+  TodoOnProgress,
+  TodoTodo,
+} from "../components/Todo"
 
 import { Container } from "../components/Container"
+import { LastUpdateProvider } from "../contexts/last-update"
 import { LoginLogo } from "../components/Login"
 
 const todo = () => {
   return (
     <Container>
       <LoginLogo />
-      <TodoMenu
-        menus={[
-          {
-            label: "To Do (1)",
-            content: <TodoList />,
-          },
-          {
-            label: "On Progress (78)",
-            content: "tiga",
-          },
-          {
-            label: "Done (100)",
-            content: "tiga",
-          },
-        ]}
-      />
+      <LastUpdateProvider>
+        <TodoMenu
+          menus={[
+            {
+              label: "To Do",
+              content: <TodoTodo />,
+            },
+            {
+              label: "On Progress",
+              content: <TodoOnProgress />,
+            },
+            {
+              label: "Done",
+              content: <TodoDone />,
+            },
+          ]}
+        />
+      </LastUpdateProvider>
     </Container>
   )
 }

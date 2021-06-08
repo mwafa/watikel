@@ -1,11 +1,11 @@
-import { ReactChild, createContext, useState } from "react"
+import { ReactChild, ReactNode, createContext, useState } from "react"
 
 export const LastUpdateCtx = createContext({
   date: new Date(),
   update: () => {},
 })
 
-export const LastUpdateProvider = ({ children }: { children: ReactChild }) => {
+export const LastUpdateProvider = ({ children }: { children: ReactNode }) => {
   const [d, setD] = useState(new Date())
   const update = () => {
     setD(new Date())

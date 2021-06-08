@@ -1,7 +1,7 @@
+import { ErrorAuth, ErrorSchema } from "../../models/errors"
 import { NextApiRequest, NextApiResponse } from "next"
 
 import { Auth } from "../../models/auth"
-import { ErrorSchema } from "../../models/errors"
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const auth = new Auth(req, res)
@@ -9,6 +9,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     switch (req.method) {
       default:
         throw ErrorSchema
+      case "GET":
+        if (auth.isLogin()) {
+          auth.update()
+          return res.json({ token: auth.toBearer() })
+        }
+        throw ErrorAuth
+
       case "POST":
         if (req.body.email && req.body.password) {
           const login = await auth.login(req.body.email, req.body.password)

@@ -45,6 +45,10 @@ export class Auth {
     return false
   }
 
+  update() {
+    return this.Cookies.set(this.CookieKey, this.toBearer(), { httpOnly: true })
+  }
+
   isLogin(): boolean | string {
     try {
       const payload = jwt.verify(this.token, process.env.SECRET) as {

@@ -12,7 +12,7 @@ export type Menu = { label: string; content: ReactNode }
 
 export const TodoMenu = ({ menus }: { menus: Menu[] }) => {
   return (
-    <Tabs>
+    <Tabs isFitted>
       <TabList>
         {menus.map(({ label }, idx) => (
           <Tab key={`tab-${idx}`}>{label}</Tab>

@@ -4,16 +4,29 @@ import {
   HamburgerIcon,
   RepeatIcon,
 } from "@chakra-ui/icons"
+import { Button, IconButton } from "@chakra-ui/button"
+import {
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+} from "@chakra-ui/modal"
 import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/menu"
+import React, { useContext } from "react"
 
-import { IconButton } from "@chakra-ui/button"
+import { Input } from "@chakra-ui/input"
 import { LastUpdateCtx } from "../contexts/last-update"
+import { VStack } from "@chakra-ui/layout"
 import { fetcher } from "../services/fetcher"
-import { useContext } from "react"
+import { useDisclosure } from "@chakra-ui/hooks"
 import { useRouter } from "next/dist/client/router"
 
 export const MainMenu = () => {
   const { update } = useContext(LastUpdateCtx)
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const router = useRouter()
   return (
     <Menu>
@@ -23,7 +36,9 @@ export const MainMenu = () => {
         icon={<HamburgerIcon />}
       />
       <MenuList>
-        <MenuItem icon={<AddIcon />}>New Task</MenuItem>
+        <MenuItem onClick={onOpen} icon={<AddIcon />}>
+          New Task
+        </MenuItem>
         <MenuItem onClick={() => update()} icon={<RepeatIcon />}>
           Refresh Task
         </MenuItem>
@@ -38,6 +53,28 @@ export const MainMenu = () => {
           Log out
         </MenuItem>
       </MenuList>
+
+      <Drawer isOpen={isOpen} placement="bottom" onClose={onClose}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>New Task</DrawerHeader>
+
+          <DrawerBody>
+            <VStack>
+              <Input placeholder="Title" />
+              <Input placeholder="Reference" />
+            </VStack>
+          </DrawerBody>
+
+          <DrawerFooter>
+            <Button variant="outline" mr={3} onClick={onClose}>
+              Cancel
+            </Button>
+            <Button colorScheme="blue">Save</Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </Menu>
   )
 }

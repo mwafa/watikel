@@ -58,20 +58,22 @@ export const MainMenu = () => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>New Task</DrawerHeader>
+          <DrawerHeader fontSize="md">New Task</DrawerHeader>
 
           <DrawerBody>
-            <VStack>
-              <Input placeholder="Title" />
-              <Input placeholder="Reference" />
+            <VStack spacing="4">
+              <Input size="sm" variant="flushed" placeholder="Title" />
+              <Input size="sm" variant="flushed" placeholder="Reference" />
             </VStack>
           </DrawerBody>
 
           <DrawerFooter>
-            <Button variant="outline" mr={3} onClick={onClose}>
+            <Button size="sm" variant="outline" mr={3} onClick={onClose}>
               Cancel
             </Button>
-            <Button colorScheme="blue">Save</Button>
+            <Button size="sm" colorScheme="orange">
+              Save
+            </Button>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

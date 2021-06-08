@@ -1,5 +1,5 @@
 import { Box, Stack } from "@chakra-ui/layout"
-import { FormEventHandler, useState } from "react"
+import { FormEventHandler, useEffect, useState } from "react"
 import { Input, InputProps } from "@chakra-ui/input"
 
 import { Button } from "@chakra-ui/button"
@@ -19,6 +19,14 @@ export const Form = () => {
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [load, setLoad] = useState<boolean>(false)
+
+  useEffect(() => {
+    fetcher<{ error?: boolean }>("/api/auth")
+      .then((r) => {
+        if (!r.error) router.push("/todo")
+      })
+      .catch(console.log)
+  }, [])
 
   const onSubmit: FormEventHandler = (e) => {
     const url = "/api/auth"

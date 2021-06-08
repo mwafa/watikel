@@ -36,7 +36,7 @@ export const Tasks = {
       })
       .then((data) => {
         return data.map((todo) => {
-          delete todo.assigned.password
+          delete todo.assigned?.password
           return todo
         })
       })

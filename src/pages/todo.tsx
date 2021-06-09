@@ -8,6 +8,7 @@ import {
 import { Container } from "../components/Container"
 import { Flex } from "@chakra-ui/layout"
 import Head from "next/head"
+import { LastUpdate } from "../components/LastUpdate"
 import { LastUpdateProvider } from "../contexts/last-update"
 import { LoginLogo } from "../components/Login"
 import { MainMenu } from "../components/Menu"
@@ -17,19 +18,23 @@ import { useRouter } from "next/dist/client/router"
 
 const todo = () => {
   const router = useRouter()
+
   useEffect(() => {
     fetcher<{ error?: boolean }>("/api/auth").then((r) => {
       if (r.error) router.push("/")
     })
   }, [])
+
   return (
     <Container>
       <Head>
         <title>Watikel - Tasks</title>
       </Head>
       <LastUpdateProvider>
-        <Flex justifyContent="space-between">
-          <LoginLogo />
+        <Flex justifyContent="space-between" alignItems="center">
+          <LoginLogo>
+            <LastUpdate />
+          </LoginLogo>
           <MainMenu />
         </Flex>
         <TodoMenu

@@ -16,7 +16,9 @@ export const TodoMenu = ({ menus }: { menus: Menu[] }) => {
     <Tabs isFitted>
       <TabList>
         {menus.map(({ label }, idx) => (
-          <Tab key={`tab-${idx}`}>{label}</Tab>
+          <Tab key={`tab-${idx}`} fontSize="sm">
+            {label}
+          </Tab>
         ))}
       </TabList>
 

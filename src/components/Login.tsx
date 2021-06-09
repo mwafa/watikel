@@ -1,4 +1,4 @@
-import { Box, Stack } from "@chakra-ui/layout"
+import { Box, BoxProps, Stack } from "@chakra-ui/layout"
 import { FormEventHandler, useEffect, useState } from "react"
 import { Input, InputProps } from "@chakra-ui/input"
 
@@ -7,9 +7,16 @@ import { fetcher } from "../services/fetcher"
 import { useRouter } from "next/dist/client/router"
 import { useToast } from "@chakra-ui/toast"
 
-export const LoginLogo = () => (
-  <Box fontSize="3em" fontWeight="bold" color="gray.600" fontFamily="heading">
+export const LoginLogo = ({ children, ...props }: BoxProps) => (
+  <Box
+    fontSize="3em"
+    fontWeight="bold"
+    color="gray.600"
+    fontFamily="heading"
+    {...props}
+  >
     Watikel
+    {children}
   </Box>
 )
 

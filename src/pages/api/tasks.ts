@@ -5,10 +5,12 @@ import { Task, Tasks } from "../../models/task"
 import { Auth } from "../../models/auth"
 import { Tag } from ".prisma/client"
 import { User } from "../../models/user"
+import { db } from "../../db"
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const auth = new Auth(req, res)
   const email = auth.isLogin()
+  const id = req.query.id ? Number(req.query.id.toString()) : 0
   try {
     if (!email || typeof email === "boolean") throw ErrorAuth
 
@@ -24,6 +26,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         const task = await Tasks.byTag(tag)
         return res.json({ tag, data: task })
 
+      case "DELETE":
+        const c = await db.todo.delete({ where: { id } })
+        return res.json({ data: c })
+
       case "POST":
         const { title, reference } = req.body
         if (!title) throw ErrorSchema
@@ -31,7 +37,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         return res.json({ data: inserted })
 
       case "PUT":
-        const id = req.query.id ? Number(req.query.id.toString()) : 0
         const card = new Task(id)
         const me = new User(email)
         const { id: userId } = await me.details()

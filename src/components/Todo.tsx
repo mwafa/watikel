@@ -2,12 +2,13 @@ import { Box, Flex, Link, Stack } from "@chakra-ui/layout"
 import { ReactNode, useContext, useEffect, useState } from "react"
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/tabs"
 import { Tag, User, todo } from ".prisma/client"
+import { fetchTask, fetcher } from "../services/fetcher"
 
 import { AtSignIcon } from "@chakra-ui/icons"
 import { Button } from "@chakra-ui/button"
 import { LastUpdateCtx } from "../contexts/last-update"
-import { fetchTask } from "../services/fetcher"
 import moment from "moment"
+import { useToast } from "@chakra-ui/toast"
 
 export type Menu = { label: string; content: ReactNode }
 
@@ -94,7 +95,7 @@ export const TodoList = ({
 }
 
 export const TodoTodo = () => {
-  const { date } = useContext(LastUpdateCtx)
+  const { date, update } = useContext(LastUpdateCtx)
   const [data, setData] = useState<todo[]>([])
   useEffect(() => {
     fetchTask(Tag.TODO).then(setData)
@@ -104,28 +105,55 @@ export const TodoTodo = () => {
       data={data}
       actionLabel="Do This"
       action={(id) => {
-        console.log(id)
+        fetcher(`/api/tasks?id=${id}&tag=${Tag.ON_PROGRESS}`, {
+          method: "PUT",
+        })
+          .then(() => {})
+          .finally(() => update())
       }}
     ></TodoList>
   )
 }
 
 export const TodoOnProgress = () => {
-  const { date } = useContext(LastUpdateCtx)
+  const { date, update } = useContext(LastUpdateCtx)
   const [data, setData] = useState<todo[]>([])
   useEffect(() => {
     fetchTask(Tag.ON_PROGRESS).then(setData)
   }, [date])
-  return <TodoList data={data} action={() => {}} actionLabel="Done"></TodoList>
+  return (
+    <TodoList
+      data={data}
+      action={(id) => {
+        fetcher(`/api/tasks?id=${id}&tag=${Tag.DONE}`, {
+          method: "PUT",
+        })
+          .then(() => {})
+          .finally(() => update())
+      }}
+      actionLabel="Done"
+    ></TodoList>
+  )
 }
 
 export const TodoDone = () => {
-  const { date } = useContext(LastUpdateCtx)
+  const { date, update } = useContext(LastUpdateCtx)
   const [data, setData] = useState<todo[]>([])
   useEffect(() => {
     fetchTask(Tag.DONE).then(setData)
   }, [date])
   return (
-    <TodoList data={data} action={() => {}} actionLabel="Delete"></TodoList>
+    <TodoList
+      data={data}
+      action={(id) => {
+        if (confirm("Hapus task?"))
+          fetcher(`/api/tasks?id=${id}`, {
+            method: "DELETE",
+          })
+            .then(() => {})
+            .finally(() => update())
+      }}
+      actionLabel="Delete"
+    ></TodoList>
   )
 }
